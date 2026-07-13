@@ -2,6 +2,7 @@
 // Hero — two-column editorial: statement left, measurement graphic right.
 import { withBase } from '../lib/paths.js';
 import GrowthPlot from './graphics/GrowthPlot.astro';
+import Tagline from './Tagline.astro';
 ---
 <section class="hero" aria-label="Introduction">
   <div class="wrap hero__inner">
@@ -14,7 +15,11 @@ import GrowthPlot from './graphics/GrowthPlot.astro';
         <span class="line"><span>Grow.</span></span>
       </h1>
 
-      <p class="hero__sub measure" data-reveal style="--reveal-delay:200ms">
+      <div class="hero__tagline" data-reveal style="--reveal-delay:160ms">
+        <Tagline align="start" />
+      </div>
+
+      <p class="hero__sub measure" data-reveal style="--reveal-delay:240ms">
         Building brands with precision, strategy, and measurable growth.
       </p>
 
@@ -69,8 +74,9 @@ import GrowthPlot from './graphics/GrowthPlot.astro';
     letter-spacing: -0.035em;
     font-weight: 450;
   }
+  .hero__tagline { margin-top: clamp(1.6rem, 3vw, 2.2rem); align-self: stretch; max-width: 30rem; }
   .hero__sub {
-    margin-top: clamp(1.6rem, 3vw, 2.4rem);
+    margin-top: clamp(1.4rem, 2.6vw, 2rem);
     font-size: var(--step-1);
     line-height: 1.4;
     color: var(--text);

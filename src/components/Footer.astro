@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import Tagline from './Tagline.astro';
 import { withBase } from '../lib/paths.js';
 const year = 2026; // build-time constant; update on redesign
 const nav = [
@@ -16,7 +17,7 @@ const nav = [
     <div class="site-footer__top">
       <div class="site-footer__brand">
         <Logo variant="footer" />
-        <p class="site-footer__tagline">Measure. Scale. Grow.</p>
+        <div class="site-footer__tagline"><Tagline align="start" /></div>
         <p class="site-footer__studio text-secondary">
           A marketing &amp; branding studio<br />in Chennai, Tamil Nadu.
         </p>
@@ -60,13 +61,8 @@ const nav = [
     gap: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 3rem);
     padding-top: clamp(2.5rem, 5vw, 4rem);
   }
-  .site-footer__brand { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
-  .site-footer__tagline {
-    font-family: var(--font-display);
-    font-size: var(--step-1);
-    letter-spacing: -0.01em;
-    color: var(--text);
-  }
+  .site-footer__brand { display: flex; flex-direction: column; gap: 1.2rem; align-items: flex-start; }
+  .site-footer__tagline { align-self: stretch; max-width: 22rem; }
   .site-footer__studio { font-size: var(--step-0); line-height: 1.5; }
 
   .site-footer__col { display: flex; flex-direction: column; gap: 0.8rem; align-items: flex-start; }
