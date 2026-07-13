@@ -101,10 +101,14 @@ function initTestimonials() {
   const root = document.querySelector('[data-testimonials]');
   if (!root) return;
 
+  const section = root.closest('section') || document;
   const slides = [...root.querySelectorAll('[data-slide]')];
   const current = root.querySelector('[data-slide-current]');
   const prev = root.querySelector('[data-prev]');
   const next = root.querySelector('[data-next]');
+  // layered caption card in the paired photo column
+  const badgeCo = section.querySelector('[data-slide-company]');
+  const badgeRole = section.querySelector('[data-slide-role]');
   if (slides.length < 2) return;
 
   let index = 0;
@@ -116,6 +120,9 @@ function initTestimonials() {
       s.setAttribute('aria-hidden', String(!active));
     });
     if (current) current.textContent = String(index + 1).padStart(2, '0');
+    const active = slides[index];
+    if (badgeCo && active?.dataset.company) badgeCo.textContent = active.dataset.company;
+    if (badgeRole && active?.dataset.role) badgeRole.textContent = active.dataset.role;
   };
 
   prev?.addEventListener('click', () => show(index - 1));

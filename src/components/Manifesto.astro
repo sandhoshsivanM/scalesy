@@ -1,4 +1,9 @@
 ---
+const principles = [
+  { k: 'A', t: 'Clarity over volume' },
+  { k: 'B', t: 'Margin over vanity' },
+  { k: 'C', t: 'Consequence over noise' },
+];
 ---
 <section class="section manifesto" id="manifesto" aria-labelledby="manifesto-label">
   <div class="wrap manifesto__inner">
@@ -12,17 +17,24 @@
         isn’t louder. It’s smarter.
       </p>
 
-      <div class="manifesto__coda" data-reveal style="--reveal-delay:120ms">
-        <p>
+      <div class="manifesto__side" data-reveal style="--reveal-delay:120ms">
+        <p class="manifesto__coda">
           Every decision should have purpose. Every campaign should create
           measurable impact. We are not in the business of noise — we are in the
           business of consequence.
         </p>
-        <p>
-          The studio exists for founders and teams who would rather be understood
-          than merely seen. We do the thinking first, and let the work follow from
-          it. That order is the whole difference.
-        </p>
+
+        <div class="manifesto__principles">
+          <p class="manifesto__principles-label">What we hold to</p>
+          <ul>
+            {principles.map((p) => (
+              <li class="principle">
+                <span class="principle__k">{p.k}</span>
+                <span class="principle__t">{p.t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -39,14 +51,13 @@
   .manifesto__body {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: subgrid;
-  }
-  @supports not (grid-template-columns: subgrid) {
-    .manifesto__body { display: contents; }
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: end;
   }
 
   .manifesto__lead {
-    grid-column: 1 / 9;
+    grid-column: 1 / 8;
     font-family: var(--font-display);
     font-size: var(--step-3);
     line-height: 1.02;
@@ -54,19 +65,51 @@
     font-weight: 450;
     color: var(--text);
   }
-  .manifesto__coda {
-    grid-column: 9 / -1;
-    align-self: end;
+
+  .manifesto__side {
+    grid-column: 8 / -1;
     display: flex;
     flex-direction: column;
-    gap: 1.4rem;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+  .manifesto__coda {
     color: var(--text-secondary);
     font-size: var(--step-0);
     line-height: 1.65;
   }
 
+  .manifesto__principles-label {
+    font-size: var(--step--1);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0.4rem;
+  }
+  .manifesto__principles ul { list-style: none; margin: 0; padding: 0; }
+  .principle {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line-faint);
+  }
+  .principle__k {
+    font-size: var(--step--1);
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    width: 1.2rem;
+  }
+  .principle__t {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
   @media (max-width: 900px) {
     .manifesto__lead { grid-column: 1 / -1; }
-    .manifesto__coda { grid-column: 1 / -1; max-width: 52ch; }
+    .manifesto__side { grid-column: 1 / -1; }
   }
 </style>

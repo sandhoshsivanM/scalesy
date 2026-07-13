@@ -1,42 +1,70 @@
 ---
 import { testimonials } from '../data/testimonials.js';
+const img = 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=1400&auto=format&fit=crop';
 ---
-<section class="section testimonials" aria-labelledby="t-label">
-  <div class="wrap">
-    <p class="eyebrow eyebrow--index testimonials__label" id="t-label" data-reveal>
-      <span>07</span>&nbsp;&nbsp;Testimonials
-    </p>
+<section class="testimonials" aria-labelledby="t-label">
+  <div class="wrap testimonials__inner">
+    <div class="testimonials__col">
+      <p class="eyebrow eyebrow--index testimonials__label" id="t-label" data-reveal>
+        <span>07</span>&nbsp;&nbsp;Testimonials
+      </p>
 
-    <div class="testimonials__stage" data-testimonials data-reveal>
-      <span class="testimonials__quote-mark" aria-hidden="true">“</span>
+      <div class="testimonials__stage" data-testimonials data-reveal>
+        <span class="testimonials__quote-mark" aria-hidden="true">“</span>
 
-      <div class="testimonials__slides">
-        {testimonials.map((t, i) => (
-          <figure class="quote" data-slide data-active={i === 0 ? '' : undefined} aria-hidden={i === 0 ? 'false' : 'true'}>
-            <blockquote class="quote__text">{t.quote}</blockquote>
-            <figcaption class="quote__cite">
-              <span class="quote__name">{t.name}</span>
-              <span class="quote__role">{t.role}, {t.company}</span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+        <div class="testimonials__slides">
+          {testimonials.map((t, i) => (
+            <figure
+              class="quote"
+              data-slide
+              data-company={t.company}
+              data-role={t.role}
+              data-active={i === 0 ? '' : undefined}
+              aria-hidden={i === 0 ? 'false' : 'true'}
+            >
+              <blockquote class="quote__text">{t.quote}</blockquote>
+              <figcaption class="quote__cite">
+                <span class="quote__name">{t.name}</span>
+                <span class="quote__role">{t.role}, {t.company}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
 
-      <div class="testimonials__controls">
-        <span class="testimonials__count">
-          <span data-slide-current>01</span>&nbsp;/&nbsp;{String(testimonials.length).padStart(2, '0')}
-        </span>
-        <div class="testimonials__buttons">
-          <button class="tbtn" data-prev aria-label="Previous testimonial">←</button>
-          <button class="tbtn" data-next aria-label="Next testimonial">→</button>
+        <div class="testimonials__controls">
+          <span class="testimonials__count">
+            <span data-slide-current>01</span>&nbsp;/&nbsp;{String(testimonials.length).padStart(2, '0')}
+          </span>
+          <div class="testimonials__buttons">
+            <button class="tbtn" data-prev aria-label="Previous testimonial">←</button>
+            <button class="tbtn" data-next aria-label="Next testimonial">→</button>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div class="testimonials__aside">
+      <figure class="testimonials__media img-reveal">
+        <img src={img} alt="A considered interior — the calibre of company Scalesy keeps" loading="lazy" width="1400" height="1600" />
+        <figcaption class="testimonials__badge">
+          <span class="testimonials__badge-co" data-slide-company>{testimonials[0].company}</span>
+          <span class="testimonials__badge-role" data-slide-role>{testimonials[0].role}</span>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
 <style>
-  .testimonials__label { margin-bottom: clamp(3rem, 6vw, 5rem); }
+  .testimonials { padding-block: var(--space-section); }
+  .testimonials__inner {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+  }
+  .testimonials__col { grid-column: 1 / 8; }
+  .testimonials__label { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 
   .testimonials__stage { position: relative; }
   .testimonials__quote-mark {
@@ -44,17 +72,14 @@ import { testimonials } from '../data/testimonials.js';
     position: absolute;
     top: -0.55em;
     left: -0.05em;
-    font-size: clamp(6rem, 16vw, 13rem);
+    font-size: clamp(5rem, 12vw, 10rem);
     line-height: 1;
     color: var(--accent);
     opacity: 0.16;
     pointer-events: none;
   }
 
-  .testimonials__slides {
-    position: relative;
-    display: grid;
-  }
+  .testimonials__slides { position: relative; display: grid; }
   .quote {
     grid-area: 1 / 1;
     margin: 0;
@@ -64,9 +89,7 @@ import { testimonials } from '../data/testimonials.js';
     transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), visibility 0s linear 0.7s;
   }
   .quote[data-active] {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
+    opacity: 1; visibility: visible; transform: none;
     transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
   }
   .quote__text {
@@ -76,44 +99,57 @@ import { testimonials } from '../data/testimonials.js';
     letter-spacing: -0.02em;
     color: var(--text);
     margin: 0;
-    max-width: 26ch;
+    max-width: 24ch;
   }
-  .quote__cite {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    margin-top: clamp(2rem, 4vw, 3rem);
-    font-style: normal;
-  }
+  .quote__cite { display: flex; flex-direction: column; gap: 0.2rem; margin-top: clamp(1.8rem, 4vw, 2.6rem); font-style: normal; }
   .quote__name { font-size: var(--step-0); color: var(--text); }
   .quote__role { font-size: var(--step--1); color: var(--text-secondary); letter-spacing: 0.02em; }
-  .quote__text { max-width: 30ch; }
 
   .testimonials__controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-top: clamp(3rem, 6vw, 4.5rem);
+    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
     padding-top: 1.6rem;
     border-top: 1px solid var(--line-faint);
   }
-  .testimonials__count {
-    font-size: var(--step--1);
-    letter-spacing: 0.12em;
-    color: var(--text-secondary);
-  }
+  .testimonials__count { font-size: var(--step--1); letter-spacing: 0.12em; color: var(--text-secondary); }
   .testimonials__count [data-slide-current] { color: var(--accent); }
   .testimonials__buttons { display: flex; gap: 0.5rem; }
   .tbtn {
-    width: 3rem; height: 3rem;
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--text);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: border-color 0.35s var(--ease), color 0.35s var(--ease), background 0.35s var(--ease);
+    width: 3rem; height: 3rem; background: none;
+    border: 1px solid var(--line); color: var(--text); border-radius: 50%;
+    cursor: pointer; font-size: 1rem;
+    transition: border-color 0.35s var(--ease), color 0.35s var(--ease);
   }
   .tbtn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* right column: photograph + layered caption card */
+  .testimonials__aside { grid-column: 8 / -1; }
+  .testimonials__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    margin: 0;
+  }
+  .testimonials__media img { width: 100%; height: 100%; object-fit: cover; }
+  .testimonials__badge {
+    position: absolute;
+    left: clamp(-1.4rem, -1.5vw, -1rem);
+    bottom: clamp(1.4rem, 3vw, 2.4rem);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 1rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 12rem;
+  }
+  .testimonials__badge-co { font-family: var(--font-display); font-size: var(--step-0); color: var(--text); }
+  .testimonials__badge-role {
+    font-size: var(--step--1); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .testimonials__col { grid-column: 1 / -1; }
+    .testimonials__aside { grid-column: 1 / -1; margin-top: clamp(3rem, 7vw, 4rem); max-width: 30rem; }
+    .quote__text { max-width: 30ch; }
+  }
 </style>

@@ -1,4 +1,5 @@
 ---
+import MeasureScale from './graphics/MeasureScale.astro';
 const steps = [
   { n: '01', title: 'Discover', body: 'We learn the business before the brand — the economics, the audience, the constraints no one wrote down.' },
   { n: '02', title: 'Strategize', body: 'We decide what to do and, harder, what to refuse. The strategy is a short document you could defend under questioning.' },
@@ -9,15 +10,19 @@ const steps = [
 ];
 ---
 <section class="section process" id="process" aria-labelledby="process-label">
-  <div class="wrap">
-    <div class="process__head" data-reveal>
-      <p class="eyebrow eyebrow--index" id="process-label">
-        <span>05</span>&nbsp;&nbsp;Process
-      </p>
-      <h2 class="process__title measure-narrow">
-        A method that earns its confidence in that order.
-      </h2>
-    </div>
+  <div class="wrap process__inner">
+    <aside class="process__intro">
+      <div class="process__intro-inner">
+        <p class="eyebrow eyebrow--index" id="process-label" data-reveal>
+          <span>05</span>&nbsp;&nbsp;Process
+        </p>
+        <h2 class="process__title" data-reveal>
+          A method that earns its confidence in that order.
+        </h2>
+        <p class="process__note text-secondary" data-reveal>Six stages. None skipped, none reordered.</p>
+        <div class="process__scale"><MeasureScale from={1} to={6} /></div>
+      </div>
+    </aside>
 
     <ol class="process__list">
       {steps.map((s, i) => (
@@ -34,30 +39,34 @@ const steps = [
 </section>
 
 <style>
-  .process__head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 1.5rem 3rem;
-    margin-bottom: clamp(3rem, 7vw, 5.5rem);
+  .process__inner {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(1.5rem, 4vw, 4rem);
   }
+  .process__intro { grid-column: 1 / 5; }
+  .process__intro-inner { position: sticky; top: 110px; }
   .process__title {
+    margin-top: clamp(1.6rem, 3vw, 2.4rem);
     font-size: var(--step-2);
     letter-spacing: -0.02em;
     color: var(--text);
+    max-width: 16ch;
   }
+  .process__note { margin-top: 1.2rem; font-size: var(--step-0); }
+  .process__scale { margin-top: clamp(2.5rem, 5vw, 4rem); height: 22rem; }
 
-  .process__list { list-style: none; margin: 0; padding: 0; }
+  .process__list { grid-column: 6 / -1; list-style: none; margin: 0; padding: 0; }
   .step {
     display: grid;
-    grid-template-columns: minmax(4rem, 8rem) 1fr;
-    gap: clamp(1.5rem, 5vw, 5rem);
-    padding-block: clamp(2rem, 4vw, 3rem);
+    grid-template-columns: minmax(3rem, 5rem) 1fr;
+    gap: clamp(1.2rem, 3vw, 3rem);
+    padding-block: clamp(1.8rem, 3.5vw, 2.6rem);
     border-top: 1px solid var(--line-faint);
     position: relative;
   }
-  .step:last-child { border-bottom: 1px solid var(--line-faint); }
+  .step:first-child { padding-top: 0; border-top: 0; }
+  .step:last-child { border-bottom: 1px solid var(--line-faint); padding-bottom: clamp(1.8rem, 3.5vw, 2.6rem); }
   .step::before {
     content: "";
     position: absolute;
@@ -65,30 +74,21 @@ const steps = [
     width: 2.4rem; height: 1px;
     background: var(--accent);
   }
+  .step:first-child::before { display: none; }
   .step__n {
     font-family: var(--font-display);
     font-size: var(--step-1);
     color: var(--accent);
     letter-spacing: 0.02em;
   }
-  .step__content {
-    display: grid;
-    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
-    gap: clamp(1rem, 3vw, 3rem);
-    align-items: baseline;
-  }
-  .step__title {
-    font-size: var(--step-2);
-    letter-spacing: -0.02em;
-  }
-  .step__body {
-    font-size: var(--step-0);
-    line-height: 1.6;
-    max-width: 46ch;
-  }
+  .step__title { font-size: var(--step-2); letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+  .step__body { font-size: var(--step-0); line-height: 1.6; max-width: 44ch; }
 
-  @media (max-width: 760px) {
-    .step { grid-template-columns: 3rem 1fr; gap: 1.2rem; }
-    .step__content { grid-template-columns: 1fr; gap: 0.7rem; }
+  @media (max-width: 860px) {
+    .process__intro { grid-column: 1 / -1; }
+    .process__intro-inner { position: static; }
+    .process__scale { display: none; }
+    .process__list { grid-column: 1 / -1; margin-top: clamp(2.5rem, 6vw, 3.5rem); }
+    .step { grid-template-columns: 3rem 1fr; }
   }
 </style>
