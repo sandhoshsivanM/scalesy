@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import BookingForm from '../components/BookingForm.astro';
+
+const details = [
+  { label: 'Email', value: 'hello@scalesy.com', href: 'mailto:hello@scalesy.com' },
+  { label: 'Phone', value: '+91 44 4000 1200', href: 'tel:+914440001200' },
+  { label: 'Studio', value: '3rd Floor, 24 Cenotaph Road, Teynampet, Chennai 600018', href: null },
+  { label: 'Hours', value: 'Mon–Fri, 10:00–18:00 IST', href: null },
+];
+const socials = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
+  { label: 'Instagram', href: 'https://www.instagram.com/' },
+  { label: 'X', href: 'https://x.com/' },
+];
+---
+<Base title="Contact — Scalesy" description="Book a discovery call with Scalesy, a marketing and branding studio in Chennai.">
+  <section class="contact-page">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--index" data-reveal>Contact</p>
+
+      <h1 class="contact-page__headline" data-reveal-lines>
+        <span class="line"><span>Ready to build</span></span>
+        <span class="line"><span>something remarkable?</span></span>
+      </h1>
+
+      <p class="contact-page__lead measure text-secondary" data-reveal style="--reveal-delay:160ms">
+        Tell us what you’re building and where it’s stuck. Every enquiry is read
+        by a partner — not a bot, not a queue.
+      </p>
+
+      <div class="contact-page__grid">
+        <div class="contact-page__form" data-reveal style="--reveal-delay:220ms">
+          <p class="contact-page__form-label eyebrow">Book a Discovery Call</p>
+          <BookingForm />
+        </div>
+
+        <aside class="contact-page__aside" data-reveal style="--reveal-delay:300ms">
+          <dl class="contact-details">
+            {details.map((d) => (
+              <div class="contact-details__row">
+                <dt>{d.label}</dt>
+                <dd>
+                  {d.href ? (
+                    <a href={d.href} class="link-underline">{d.value}</a>
+                  ) : (
+                    <span>{d.value}</span>
+                  )}
+                </dd>
+              </div>
+            ))}
+            <div class="contact-details__row">
+              <dt>Social</dt>
+              <dd class="contact-details__social">
+                {socials.map((s) => (
+                  <a href={s.href} class="link-underline" target="_blank" rel="noopener">{s.label}</a>
+                ))}
+              </dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+
+      <div class="rule-ticked contact-page__rule" aria-hidden="true"></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact-page {
+    padding-top: clamp(3rem, 10vh, 8rem);
+    padding-bottom: clamp(4rem, 9vw, 7rem);
+  }
+  .contact-page .eyebrow { margin-bottom: clamp(2rem, 5vw, 3rem); }
+  .contact-page__headline {
+    font-size: var(--step-4);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    font-weight: 450;
+    max-width: 18ch;
+  }
+  .contact-page__lead {
+    margin-top: clamp(1.8rem, 4vw, 2.6rem);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  .contact-page__grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+  }
+  .contact-page__form { grid-column: 1 / 8; }
+  .contact-page__form-label { margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .contact-page__aside { grid-column: 9 / -1; }
+
+  .contact-details { margin: 0; }
+  .contact-details__row {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 1.2rem;
+    padding-block: 1.2rem;
+    border-top: 1px solid var(--line-faint);
+  }
+  .contact-details__row:last-child { border-bottom: 1px solid var(--line-faint); }
+  .contact-details dt {
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .contact-details dd { margin: 0; font-size: var(--step-0); color: var(--text); line-height: 1.5; }
+  .contact-details__social { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+
+  .contact-page__rule { margin-top: clamp(4rem, 9vw, 7rem); }
+
+  @media (max-width: 960px) {
+    .contact-page__form { grid-column: 1 / -1; }
+    .contact-page__aside { grid-column: 1 / -1; }
+  }
+</style>

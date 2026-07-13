@@ -1,0 +1,20 @@
+# build output
+dist/
+.dist/
+# dependencies
+node_modules/
+# generated types
+.astro/
+# environment / logs
+.env
+.env.production
+npm-debug.log*
+# os
+.DS_Store
+
+# licensed font source
+Neue Montreal.zip
+
+# raw brand-exploration source images (site uses the processed files in public/brand/)
+Scalsy/
+.dist/

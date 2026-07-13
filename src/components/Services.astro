@@ -1,0 +1,96 @@
+---
+import { services } from '../data/services.js';
+import { withBase } from '../lib/paths.js';
+const pad = (n) => String(n + 1).padStart(2, '0');
+---
+<section class="section services" id="services" aria-labelledby="services-label">
+  <div class="wrap">
+    <p class="eyebrow eyebrow--index services__label" id="services-label" data-reveal>
+      <span>03</span>&nbsp;&nbsp;Services
+    </p>
+
+    <ul class="services__list">
+      {services.map((s, i) => (
+        <li class="service" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+          <a class="service__link" href={withBase('/contact')}>
+            <span class="service__index">{pad(i)}</span>
+            <span class="service__title">{s.title}</span>
+            <span class="service__summary">{s.summary}</span>
+            <span class="service__mark" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services__label { margin-bottom: clamp(3rem, 6vw, 5rem); }
+  .services__list { list-style: none; margin: 0; padding: 0; }
+
+  .service { border-top: 1px solid var(--line-faint); }
+  .service:last-child { border-bottom: 1px solid var(--line-faint); }
+
+  .service__link {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1.1fr) 2rem;
+    align-items: baseline;
+    gap: clamp(1rem, 3vw, 3rem);
+    padding-block: clamp(1.6rem, 3vw, 2.4rem);
+    position: relative;
+  }
+  .service__link::before {
+    content: "";
+    position: absolute;
+    left: 0; top: -1px;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.55s var(--ease);
+  }
+  .service:hover .service__link::before,
+  .service__link:focus-visible::before { width: 100%; }
+
+  .service__index {
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+    letter-spacing: 0.08em;
+    transition: color 0.4s var(--ease);
+  }
+  .service__title {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+    color: var(--text);
+    transition: transform 0.5s var(--ease), color 0.4s var(--ease);
+  }
+  .service__summary {
+    font-size: var(--step-0);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    transition: color 0.4s var(--ease);
+  }
+  .service__mark {
+    justify-self: end;
+    color: var(--text-secondary);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), color 0.4s var(--ease);
+  }
+
+  .service:hover .service__title { transform: translateX(8px); }
+  .service:hover .service__index,
+  .service:hover .service__mark { color: var(--accent); }
+  .service:hover .service__mark { opacity: 1; transform: none; }
+  .service:hover .service__summary { color: var(--text); }
+
+  @media (max-width: 820px) {
+    .service__link {
+      grid-template-columns: 2.5rem 1fr;
+      row-gap: 0.6rem;
+      align-items: start;
+    }
+    .service__summary { grid-column: 2; }
+    .service__mark { display: none; }
+    .service:hover .service__title { transform: none; }
+  }
+</style>

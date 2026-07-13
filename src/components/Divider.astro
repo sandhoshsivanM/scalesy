@@ -1,0 +1,9 @@
+---
+// Hairline gold divider. `ticked` renders the precision-measurement variant.
+const { ticked = false, faint = false, class: className = '' } = Astro.props;
+---
+{ticked ? (
+  <div class:list={['rule-ticked', className]} role="separator" aria-hidden="true"></div>
+) : (
+  <hr class:list={['rule', faint && 'rule--faint', className]} />
+)}

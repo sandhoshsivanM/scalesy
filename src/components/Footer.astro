@@ -1,0 +1,105 @@
+---
+import Logo from './Logo.astro';
+import { withBase } from '../lib/paths.js';
+const year = 2026; // build-time constant; update on redesign
+const nav = [
+  { label: 'Work', href: '/work' },
+  { label: 'Insights', href: '/insights' },
+  { label: 'Studio', href: '/#manifesto' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="rule-ticked" aria-hidden="true"></div>
+
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <Logo variant="footer" />
+        <p class="site-footer__tagline">Measure. Scale. Grow.</p>
+        <p class="site-footer__studio text-secondary">
+          A marketing &amp; branding studio<br />in Chennai, Tamil Nadu.
+        </p>
+      </div>
+
+      <nav class="site-footer__col" aria-label="Footer">
+        <p class="site-footer__heading">Menu</p>
+        {nav.map((item) => (
+          <a href={withBase(item.href)} class="link-underline">{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="site-footer__col">
+        <p class="site-footer__heading">Studio</p>
+        <a href="mailto:hello@scalesy.com" class="link-underline">hello@scalesy.com</a>
+        <a href="tel:+914440001200" class="link-underline">+91 44 4000 1200</a>
+        <span class="text-secondary">Teynampet, Chennai 600018</span>
+      </div>
+
+      <div class="site-footer__col">
+        <p class="site-footer__heading">Social</p>
+        <a href="https://www.linkedin.com/" class="link-underline" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/" class="link-underline" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/" class="link-underline" target="_blank" rel="noopener">X</a>
+      </div>
+    </div>
+
+    <div class="site-footer__base">
+      <p class="site-footer__copy">© {year} Scalesy. All rights reserved.</p>
+      <a href="#main" class="site-footer__top-link link-underline">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { padding-block: clamp(3rem, 6vw, 5rem) 2.5rem; }
+
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.3fr 1fr;
+    gap: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 3rem);
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .site-footer__brand { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
+  .site-footer__tagline {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .site-footer__studio { font-size: var(--step-0); line-height: 1.5; }
+
+  .site-footer__col { display: flex; flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+  .site-footer__col a, .site-footer__col span { font-size: var(--step-0); }
+  .site-footer__heading {
+    font-size: var(--step--1);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .site-footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.8rem;
+    border-top: 1px solid var(--line-faint);
+  }
+  .site-footer__copy, .site-footer__top-link {
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 860px) {
+    .site-footer__top { grid-template-columns: 1fr 1fr; }
+    .site-footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 520px) {
+    .site-footer__top { grid-template-columns: 1fr; }
+  }
+</style>

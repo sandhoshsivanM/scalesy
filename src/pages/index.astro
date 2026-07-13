@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ClientRoster from '../components/ClientRoster.astro';
+import Manifesto from '../components/Manifesto.astro';
+import Services from '../components/Services.astro';
+import SelectedWork from '../components/SelectedWork.astro';
+import Process from '../components/Process.astro';
+import InsightsList from '../components/InsightsList.astro';
+import Testimonials from '../components/Testimonials.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+---
+<Base>
+  <Hero />
+  <ClientRoster />
+  <Manifesto />
+  <Services />
+  <SelectedWork />
+  <Process />
+  <InsightsList limit={3} />
+  <Testimonials />
+  <ContactCTA />
+</Base>

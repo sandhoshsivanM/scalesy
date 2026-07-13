@@ -1,0 +1,13 @@
+{
+  "name": "Scalesy",
+  "short_name": "Scalesy",
+  "description": "A marketing and branding studio in Chennai. Measure. Scale. Grow.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0E0E",
+  "theme_color": "#0E0E0E",
+  "icons": [
+    { "src": "/brand/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

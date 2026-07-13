@@ -1,0 +1,92 @@
+---
+// Hero — large wordmark handled by header; this is the opening statement.
+import { withBase } from '../lib/paths.js';
+---
+<section class="hero" aria-label="Introduction">
+  <div class="wrap hero__inner">
+    <p class="eyebrow hero__eyebrow" data-reveal>Marketing & Branding Studio</p>
+
+    <h1 class="hero__headline" data-reveal-lines>
+      <span class="line"><span>Measure.</span></span>
+      <span class="line"><span>Scale.</span></span>
+      <span class="line"><span>Grow.</span></span>
+    </h1>
+
+    <div class="hero__meta" data-reveal style="--reveal-delay:200ms">
+      <span class="hero__meta-line">Studio — Chennai, Tamil Nadu</span>
+      <span class="hero__meta-line">Working across South India</span>
+      <span class="hero__meta-line hero__meta-est">Est. MMXIX</span>
+    </div>
+
+    <div class="hero__aside">
+      <p class="hero__sub measure" data-reveal style="--reveal-delay:200ms">
+        Building brands with precision, strategy, and measurable growth.
+      </p>
+      <a href={withBase('/contact')} class="cta hero__cta" data-reveal style="--reveal-delay:320ms">
+        <span>Book a Discovery Call</span>
+        <span class="cta__arrow" aria-hidden="true">→</span>
+        <span class="cta__bar"></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="rule-ticked hero__rule" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(4rem, 12vh, 9rem);
+    padding-bottom: clamp(2rem, 5vw, 4rem);
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    row-gap: clamp(2rem, 5vw, 3.5rem);
+  }
+  .hero__eyebrow { grid-column: 1 / -1; }
+
+  .hero__headline {
+    grid-column: 1 / -1;
+    font-size: var(--step-4);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+    font-weight: 450;
+  }
+
+  .hero__aside {
+    grid-column: 7 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    justify-self: end;
+    max-width: 34rem;
+  }
+  .hero__sub {
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .hero__meta {
+    grid-column: 1 / 6;
+    align-self: end;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: var(--step--1);
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+  }
+  .hero__meta-est { color: var(--accent); letter-spacing: 0.14em; }
+
+  .hero__rule { margin-top: clamp(3rem, 8vw, 6rem); }
+
+  @media (max-width: 860px) {
+    .hero__aside { grid-column: 1 / -1; justify-self: start; }
+    .hero__meta { grid-column: 1 / -1; margin-top: 0.5rem; }
+  }
+</style>

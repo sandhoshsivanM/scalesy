@@ -1,0 +1,72 @@
+---
+---
+<section class="section manifesto" id="manifesto" aria-labelledby="manifesto-label">
+  <div class="wrap manifesto__inner">
+    <p class="eyebrow eyebrow--index manifesto__label" id="manifesto-label" data-reveal>
+      <span>02</span>&nbsp;&nbsp;Manifesto
+    </p>
+
+    <div class="manifesto__body">
+      <p class="manifesto__lead" data-reveal>
+        We believe great marketing<br />
+        isn’t louder. It’s smarter.
+      </p>
+
+      <div class="manifesto__coda" data-reveal style="--reveal-delay:120ms">
+        <p>
+          Every decision should have purpose. Every campaign should create
+          measurable impact. We are not in the business of noise — we are in the
+          business of consequence.
+        </p>
+        <p>
+          The studio exists for founders and teams who would rather be understood
+          than merely seen. We do the thinking first, and let the work follow from
+          it. That order is the whole difference.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .manifesto__inner {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    row-gap: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .manifesto__label { grid-column: 1 / -1; }
+
+  .manifesto__body {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  @supports not (grid-template-columns: subgrid) {
+    .manifesto__body { display: contents; }
+  }
+
+  .manifesto__lead {
+    grid-column: 1 / 9;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    font-weight: 450;
+    color: var(--text);
+  }
+  .manifesto__coda {
+    grid-column: 9 / -1;
+    align-self: end;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    color: var(--text-secondary);
+    font-size: var(--step-0);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 900px) {
+    .manifesto__lead { grid-column: 1 / -1; }
+    .manifesto__coda { grid-column: 1 / -1; max-width: 52ch; }
+  }
+</style>

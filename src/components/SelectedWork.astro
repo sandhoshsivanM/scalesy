@@ -1,0 +1,140 @@
+---
+import { featuredWork } from '../data/work.js';
+import { withBase } from '../lib/paths.js';
+
+// Reusable on the home page (featured) and the /work index (all).
+const {
+  items = featuredWork,
+  showHeader = true,
+  eyebrowIndex = '04',
+} = Astro.props;
+---
+<section class="section work" id="work" aria-labelledby="work-label">
+  <div class="wrap">
+    {showHeader && (
+      <div class="work__head" data-reveal>
+        <p class="eyebrow eyebrow--index" id="work-label">
+          <span>{eyebrowIndex}</span>&nbsp;&nbsp;Selected Work
+        </p>
+        <p class="work__head-note text-secondary measure-narrow">
+          A small number of engagements, chosen because the thinking behind them
+          still holds up.
+        </p>
+      </div>
+    )}
+
+    <div class="work__list">
+      {items.map((p, i) => (
+        <article class={`work-item ${i % 2 === 1 ? 'work-item--alt' : ''}`}>
+          <a class="work-item__media img-reveal" href={withBase(`/work/${p.slug}`)} aria-label={`View ${p.name}`}>
+            <img src={p.image} alt={`${p.name} — ${p.industry}`} loading="lazy" width="1600" height="1067" />
+          </a>
+
+          <div class="work-item__meta" data-reveal>
+            <p class="work-item__num">{String(i + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</p>
+            <h3 class="work-item__name">{p.name}</h3>
+            <dl class="work-item__facts">
+              <div>
+                <dt>Industry</dt>
+                <dd>{p.industry}</dd>
+              </div>
+              <div>
+                <dt>Services</dt>
+                <dd>{p.services.join(', ')}</dd>
+              </div>
+            </dl>
+            <p class="work-item__excerpt text-secondary">{p.excerpt}</p>
+            <a class="cta work-item__cta" href={withBase(`/work/${p.slug}`)}>
+              <span>View Project</span>
+              <span class="cta__arrow" aria-hidden="true">→</span>
+              <span class="cta__bar"></span>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .work__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem 3rem;
+    margin-bottom: clamp(3rem, 7vw, 6rem);
+  }
+  .work__head-note { font-size: var(--step-0); }
+
+  .work__list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(5rem, 12vw, 10rem);
+  }
+
+  .work-item {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 2.4vw, 2.4rem);
+    align-items: center;
+  }
+  .work-item__media {
+    grid-column: 1 / 9;
+    grid-row: 1;
+    display: block;
+    aspect-ratio: 3 / 2;
+  }
+  .work-item__media img { width: 100%; height: 100%; object-fit: cover; }
+  .work-item__media:hover img {
+    filter: grayscale(0.15) sepia(0.08) saturate(1.05) brightness(0.98) contrast(1.02);
+  }
+
+  .work-item__meta {
+    grid-column: 9 / -1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+
+  /* alternate: image right, meta left */
+  .work-item--alt .work-item__media { grid-column: 5 / -1; }
+  .work-item--alt .work-item__meta { grid-column: 1 / 5; }
+
+  .work-item__num {
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .work-item__name {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+  }
+  .work-item__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+    margin: 0.4rem 0 0.2rem;
+  }
+  .work-item__facts dt {
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+  }
+  .work-item__facts dd { margin: 0; font-size: var(--step-0); color: var(--text); }
+  .work-item__excerpt { font-size: var(--step-0); line-height: 1.55; }
+  .work-item__cta { margin-top: 0.6rem; }
+
+  @media (max-width: 900px) {
+    .work-item,
+    .work-item--alt { grid-template-columns: 1fr; }
+    .work-item__media,
+    .work-item--alt .work-item__media { grid-column: 1; }
+    .work-item__meta,
+    .work-item--alt .work-item__meta { grid-column: 1; }
+  }
+</style>

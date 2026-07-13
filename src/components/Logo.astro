@@ -1,0 +1,51 @@
+---
+// SCALESY logo lockup: the gold measuring-tape 'S' mark + live-text wordmark.
+// The wordmark is set in Neue Montreal, letterspaced, with a gold 'A' apex —
+// echoing the supplied artwork while staying crisp at every size.
+import { withBase } from '../lib/paths.js';
+const { variant = 'header' } = Astro.props;
+const letters = 'SCALESY'.split('');
+---
+<a href={withBase('/')} class={`logo logo--${variant}`} aria-label="Scalesy — home">
+  <img class="logo__mark" src={withBase('/brand/scalesy-mark-sm.png')} alt="" width="111" height="160" />
+  <span class="logo__word" aria-hidden="true">
+    {letters.map((ch) => (
+      <span class={ch === 'A' ? 'logo__a' : ''}>{ch}</span>
+    ))}
+  </span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--text);
+  }
+  .logo__mark {
+    width: auto;
+    height: 1.7rem;
+    flex: none;
+    /* lift the mark off the dark bg without a hard edge */
+    filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.4));
+  }
+  .logo__word {
+    display: inline-flex;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.02rem;
+    letter-spacing: 0.24em;
+    /* trim trailing letter-spacing so the lockup stays optically centred */
+    margin-right: -0.24em;
+    line-height: 1;
+    color: var(--text);
+  }
+  .logo__a { color: var(--accent); }
+
+  .logo--footer .logo__mark { height: 2rem; }
+  .logo--footer .logo__word { font-size: 1.05rem; }
+
+  @media (max-width: 520px) {
+    .logo__word { font-size: 0.92rem; letter-spacing: 0.2em; margin-right: -0.2em; }
+  }
+</style>
