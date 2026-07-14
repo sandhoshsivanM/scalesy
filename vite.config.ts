@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
+import { work } from './src/data/work';
+import { insights } from './src/data/insights';
 
 // SCALESY — Vite + React, prerendered per-route via vite-react-ssg.
 // `base` is injected at build time (PUBLIC_BASE) so the same source serves from
@@ -32,5 +34,23 @@ export default defineConfig({
   ssr: {
     // gsap/lenis touch window; let the SSG runtime externalise them cleanly.
     noExternal: ['framer-motion'],
+  },
+  ssgOptions: {
+    script: 'async',
+    formatting: 'minify',
+    // Analog of Astro getStaticPaths(): expand :slug routes into one prerendered
+    // path per project / insight; drop the catch-all.
+    includedRoutes(paths) {
+      return paths.flatMap((path) => {
+        if (path.includes(':slug') && path.startsWith('/work')) {
+          return work.map((p) => `/work/${p.slug}`);
+        }
+        if (path.includes(':slug') && path.startsWith('/insights')) {
+          return insights.map((p) => `/insights/${p.slug}`);
+        }
+        if (path.includes(':slug') || path.includes('*')) return [];
+        return path;
+      });
+    },
   },
 });
