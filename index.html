@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // Theme + motion gate — runs BEFORE first paint, no framework dependency.
+      (function () {
+        var d = document.documentElement;
+        // 1) Theme: honor a saved choice, else OS preference. Default dark.
+        try {
+          var saved = localStorage.getItem('scalesy-theme');
+          var theme = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          d.setAttribute('data-theme', theme);
+        } catch (e) {
+          d.setAttribute('data-theme', 'dark');
+        }
+        // 2) Motion gate: only hide-then-reveal when JS is present AND motion is
+        //    allowed. If this class is never added (JS off / reduced-motion),
+        //    [data-reveal] content stays fully visible — the fail-safe. The
+        //    `is-visible` reveal is added later by React (post-hydration), so
+        //    there is no hydration className conflict on #root elements.
+        try {
+          if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            d.classList.add('motion-ready');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <title>SCALESY — Measure. Scale. Grow.</title>
+    <meta
+      name="description"
+      content="A branding &amp; marketing studio building brands with precision, strategy, and measurable growth. Chennai, Tamil Nadu."
+    />
+    <meta name="theme-color" content="#0E0E0E" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32.png" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="apple-touch-icon" href="%BASE_URL%brand/apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
+
+    <!-- Inter (body). Neue Montreal (display) is self-hosted via fonts.css. -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=inter@400,500&display=swap"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
