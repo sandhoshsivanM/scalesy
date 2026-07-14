@@ -35,7 +35,7 @@
 
   /* Spacing / rhythm */
   --gutter: clamp(1.4rem, 5vw, 6rem);   /* page outer margin */
-  --space-section: clamp(6rem, 12vw, 12rem);
+  --space-section: clamp(3.75rem, 6vw, 6.25rem);
 
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -208,11 +208,14 @@ img { display: block; max-width: 100%; height: auto; }
 .link-underline:hover { color: var(--accent); }
 .link-underline:hover::after { transform: scaleX(1); }
 
-/* ---- Reveal animation -------------------------------------- */
-[data-reveal] {
+/* ---- Reveal animation --------------------------------------
+   Content is VISIBLE BY DEFAULT. The hidden→shown reveal only engages when
+   JavaScript is present (html.js), so a JS failure or a missed observer can
+   never leave the page blank. */
+.js [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transform: translateY(12px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -222,34 +225,26 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* line-based text reveal (mask wipe) */
-[data-reveal-lines] .line {
-  display: block;
-  overflow: hidden;
-}
-[data-reveal-lines] .line > span {
+[data-reveal-lines] .line { display: block; overflow: hidden; }
+.js [data-reveal-lines] .line > span {
   display: block;
   transform: translateY(105%);
-  transition: transform 1s var(--ease);
+  transition: transform 0.9s var(--ease);
   transition-delay: var(--reveal-delay, 0ms);
 }
-[data-reveal-lines].is-visible .line > span {
-  transform: none;
-}
+[data-reveal-lines].is-visible .line > span { transform: none; }
 
-/* image reveal (curtain wipe) */
-.img-reveal {
-  position: relative;
-  overflow: hidden;
-}
+/* image reveal (curtain wipe). Duotone filter is ALWAYS applied so images
+   render even without JS; only the scale + curtain are JS-gated. */
+.img-reveal { position: relative; overflow: hidden; }
 .img-reveal img {
-  transform: scale(1.06);
   transition: transform 1.6s var(--ease), filter 0.9s var(--ease);
-  /* unified gold duotone — makes the photos read as one curated set,
-     not stock. Hover (below) eases back toward natural colour. */
+  /* unified gold duotone — makes the photos read as one curated set. */
   filter: grayscale(1) sepia(0.42) hue-rotate(3deg) saturate(1.35)
           brightness(0.86) contrast(1.06);
 }
-.img-reveal::after {
+.js .img-reveal img { transform: scale(1.06); }
+.js .img-reveal::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -261,10 +256,10 @@ img { display: block; max-width: 100%; height: auto; }
 .img-reveal.is-visible::after { transform: translateX(101%); }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal],
-  [data-reveal-lines] .line > span { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .img-reveal img { transform: none; transition: none; }
-  .img-reveal::after { display: none; }
+  .js [data-reveal],
+  .js [data-reveal-lines] .line > span { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .js .img-reveal img { transform: none; transition: none; }
+  .js .img-reveal::after { display: none; }
 }
 
 /* ---- Interior page masthead -------------------------------- */

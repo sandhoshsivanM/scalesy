@@ -2,58 +2,9 @@
 // Scroll reveals, header state, mobile menu, testimonial rotator.
 // All motion is suppressed under prefers-reduced-motion.
 
-const reduceMotion =
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* -------- Scroll reveals -------- */
-function initReveals() {
-  const targets = document.querySelectorAll('[data-reveal], [data-reveal-lines]');
-  if (!targets.length) return;
-
-  if (reduceMotion || !('IntersectionObserver' in window)) {
-    targets.forEach((el) => el.classList.add('is-visible'));
-    return;
-  }
-
-  const io = new IntersectionObserver(
-    (entries, obs) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      }
-    },
-    { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
-  );
-
-  targets.forEach((el) => io.observe(el));
-}
-
-/* -------- Image reveals (curtain) -------- */
-function initImageReveals() {
-  const targets = document.querySelectorAll('.img-reveal');
-  if (!targets.length) return;
-
-  if (reduceMotion || !('IntersectionObserver' in window)) {
-    targets.forEach((el) => el.classList.add('is-visible'));
-    return;
-  }
-
-  const io = new IntersectionObserver(
-    (entries, obs) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      }
-    },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.2 }
-  );
-
-  targets.forEach((el) => io.observe(el));
-}
+// Scroll reveals are handled by an inline script in Base.astro (so they run
+// even if this bundle fails). This file handles header, menu, testimonials,
+// and the booking form.
 
 /* -------- Header scroll state -------- */
 function initHeader() {
@@ -214,8 +165,6 @@ function initBooking() {
 
 /* -------- Boot -------- */
 function boot() {
-  initReveals();
-  initImageReveals();
   initHeader();
   initMenu();
   initTestimonials();

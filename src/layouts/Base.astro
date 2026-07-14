@@ -25,6 +25,32 @@ const fontFace = ['Light 300', 'Regular 400 450', 'Medium 500', 'Bold 700']
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Scroll-reveal, inlined so it always runs alongside the `.js` gate
+      // (no dependency on the deferred bundle). Content is visible by default
+      // without JS; hidden→shown only when this runs.
+      document.documentElement.classList.add('js');
+      (function () {
+        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function reveal(el) { el.classList.add('is-visible'); }
+        function init() {
+          var els = document.querySelectorAll('[data-reveal],[data-reveal-lines],.img-reveal');
+          if (reduce || !('IntersectionObserver' in window)) {
+            els.forEach(reveal);
+            return;
+          }
+          var io = new IntersectionObserver(function (entries, obs) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) { reveal(e.target); obs.unobserve(e.target); }
+            });
+          }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+          els.forEach(function (el) { io.observe(el); });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else { init(); }
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0E0E0E" />
