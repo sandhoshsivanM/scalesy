@@ -1,10 +1,97 @@
-// SCALESY — minimal interaction layer.
-// Scroll reveals, header state, mobile menu, testimonial rotator.
-// All motion is suppressed under prefers-reduced-motion.
+// SCALESY — interaction layer: smooth scroll, counters, parallax, header,
+// menu, testimonials, booking, chat. All motion respects prefers-reduced-motion.
+// Base scroll reveals run from an inline script in Base.astro (fail-safe).
+import Lenis from 'lenis';
 
-// Scroll reveals are handled by an inline script in Base.astro (so they run
-// even if this bundle fails). This file handles header, menu, testimonials,
-// and the booking form.
+const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lenis = null;
+
+/* -------- Smooth scroll (Lenis) -------- */
+function initSmoothScroll() {
+  // Skip on touch (native momentum is better) and under reduced-motion.
+  const isTouch = matchMedia('(pointer: coarse)').matches;
+  if (REDUCE || isTouch) return;
+
+  lenis = new Lenis({ duration: 1.05, smoothWheel: true });
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // same-page hash links scroll smoothly
+  document.querySelectorAll('a[href*="#"]').forEach((a) => {
+    const url = a.getAttribute('href');
+    const hash = url && url.includes('#') ? '#' + url.split('#')[1] : '';
+    if (!hash || hash === '#') return;
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(hash);
+      if (target && (url.startsWith('#') || url.startsWith('/#') || url.includes(location.pathname))) {
+        e.preventDefault();
+        lenis.scrollTo(target, { offset: -90 });
+      }
+    });
+  });
+}
+
+/* -------- Animated number counters -------- */
+function initCounters() {
+  const els = document.querySelectorAll('[data-count]');
+  if (!els.length) return;
+
+  const run = (el) => {
+    const target = parseFloat(el.getAttribute('data-count'));
+    const pad = parseInt(el.getAttribute('data-pad') || '0', 10);
+    const prefix = el.getAttribute('data-prefix') || '';
+    const suffix = el.getAttribute('data-suffix') || '';
+    const decimals = (el.getAttribute('data-count').split('.')[1] || '').length;
+    const format = (v) => {
+      let n = decimals ? v.toFixed(decimals) : String(Math.round(v));
+      if (pad) n = n.padStart(pad, '0');
+      return prefix + n + suffix;
+    };
+    if (REDUCE) { el.textContent = format(target); return; }
+    const dur = 1400;
+    let start = null;
+    const step = (t) => {
+      if (start === null) start = t;
+      const p = Math.min((t - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      el.textContent = format(target * eased);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = format(target);
+    };
+    requestAnimationFrame(step);
+  };
+
+  if (!('IntersectionObserver' in window)) { els.forEach(run); return; }
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach((e) => { if (e.isIntersecting) { run(e.target); obs.unobserve(e.target); } });
+  }, { threshold: 0.6 });
+  els.forEach((el) => io.observe(el));
+}
+
+/* -------- Parallax layers -------- */
+function initParallax() {
+  const els = [...document.querySelectorAll('[data-parallax]')];
+  if (!els.length || REDUCE) return;
+
+  const update = () => {
+    const vh = window.innerHeight;
+    for (const el of els) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) continue;
+      const speed = parseFloat(el.getAttribute('data-parallax') || '0.12');
+      // progress: -1 (below) → 1 (above), 0 when centered
+      const progress = (r.top + r.height / 2 - vh / 2) / vh;
+      el.style.transform = `translate3d(0, ${(-progress * speed * 100).toFixed(2)}px, 0)`;
+    }
+  };
+  if (lenis) lenis.on('scroll', update);
+  else window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+}
 
 /* -------- Header scroll state -------- */
 function initHeader() {
@@ -29,6 +116,7 @@ function initMenu() {
     if (open) nav.setAttribute('data-open', '');
     else nav.removeAttribute('data-open');
     document.body.style.overflow = open ? 'hidden' : '';
+    if (lenis) open ? lenis.stop() : lenis.start();
   };
 
   toggle.addEventListener('click', () => {
@@ -204,14 +292,87 @@ function initStickyCta() {
   onScroll();
 }
 
+/* -------- The System (discipline tabs) -------- */
+function initSystem() {
+  const root = document.querySelector('[data-system]');
+  if (!root) return;
+  const tabs = [...root.querySelectorAll('[data-tab]')];
+  const panels = [...root.querySelectorAll('[data-panel]')];
+  if (!tabs.length) return;
+
+  let timer = null;
+  const select = (key) => {
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === key)));
+    panels.forEach((pnl) => {
+      const on = pnl.dataset.panel === key;
+      pnl.toggleAttribute('data-active', on);
+      pnl.hidden = !on;
+    });
+  };
+  const advance = () => {
+    const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    select(tabs[(i + 1) % tabs.length].dataset.tab);
+  };
+  const startAuto = () => {
+    if (REDUCE) return;
+    stopAuto();
+    timer = setInterval(advance, 5000);
+  };
+  const stopAuto = () => { if (timer) { clearInterval(timer); timer = null; } };
+
+  tabs.forEach((t) =>
+    t.addEventListener('click', () => { select(t.dataset.tab); stopAuto(); })
+  );
+  // keyboard: left/right arrows
+  root.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const nextI = e.key === 'ArrowRight' ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
+    select(tabs[nextI].dataset.tab);
+    tabs[nextI].focus();
+    stopAuto();
+  });
+
+  // auto-rotate only while the section is in view
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((en) => (en.isIntersecting ? startAuto() : stopAuto()));
+    }, { threshold: 0.35 }).observe(root);
+  }
+}
+
+/* -------- Chat widget -------- */
+function initChat() {
+  const root = document.querySelector('[data-chat]');
+  if (!root) return;
+  const launcher = root.querySelector('[data-chat-launcher]');
+  const panel = root.querySelector('[data-chat-panel]');
+  const close = root.querySelector('[data-chat-close]');
+  const setOpen = (open) => {
+    root.toggleAttribute('data-open', open);
+    launcher?.setAttribute('aria-expanded', String(open));
+    if (open) panel?.querySelector('a,button,input')?.focus();
+  };
+  launcher?.addEventListener('click', () => setOpen(!root.hasAttribute('data-open')));
+  close?.addEventListener('click', () => { setOpen(false); launcher?.focus(); });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && root.hasAttribute('data-open')) { setOpen(false); launcher?.focus(); }
+  });
+}
+
 /* -------- Boot -------- */
 function boot() {
+  initSmoothScroll();
+  initCounters();
+  initParallax();
   initTheme();
   initHeader();
   initMenu();
   initStickyCta();
+  initSystem();
   initTestimonials();
   initBooking();
+  initChat();
 }
 
 if (document.readyState === 'loading') {

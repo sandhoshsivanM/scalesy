@@ -10,7 +10,17 @@ import GrowthPlot from './graphics/GrowthPlot.astro';
       <ul class="proof__figures" data-reveal style="--reveal-delay:120ms">
         {proof.figures.map((f) => (
           <li class="figure">
-            <span class="figure__value">{f.value}</span>
+            {f.count != null ? (
+              <span
+                class="figure__value"
+                data-count={String(f.count)}
+                data-pad={f.pad ? String(f.pad) : undefined}
+                data-suffix={f.suffix}
+                data-prefix={f.prefix}
+              >{(f.pad ? '0'.padStart(f.pad, '0') : '0') + (f.suffix || '')}</span>
+            ) : (
+              <span class="figure__value">{f.value}</span>
+            )}
             <span class="figure__label">{f.label}</span>
             <span class="figure__sub text-secondary">{f.sub}</span>
           </li>
@@ -18,7 +28,7 @@ import GrowthPlot from './graphics/GrowthPlot.astro';
       </ul>
     </div>
 
-    <div class="proof__figure">
+    <div class="proof__figure" data-parallax="0.07">
       <GrowthPlot />
     </div>
   </div>

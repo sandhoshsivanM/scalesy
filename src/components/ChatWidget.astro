@@ -1,0 +1,132 @@
+---
+// Floating concierge/chat widget. Routes to real contact channels (no fake bot).
+// Swap the actions for a live-chat embed (Crisp/Tawk/Intercom) later if desired.
+import { withBase } from '../lib/paths.js';
+---
+<div class="chat" data-chat aria-live="polite">
+  <div class="chat__panel" data-chat-panel role="dialog" aria-label="Chat with Scalesy">
+    <div class="chat__head">
+      <img class="chat__avatar" src={withBase('/brand/scalesy-mark-sm.png')} alt="" width="111" height="160" />
+      <div>
+        <p class="chat__name">Scalesy concierge</p>
+        <p class="chat__status"><span class="chat__dot" aria-hidden="true"></span> Typically replies within a few hours</p>
+      </div>
+      <button class="chat__close" data-chat-close aria-label="Close chat">✕</button>
+    </div>
+
+    <div class="chat__body">
+      <p class="chat__bubble">Hello — tell us what you’re building and we’ll point you to the right next step. A discovery call is the fastest way in.</p>
+    </div>
+
+    <div class="chat__actions">
+      <a href={withBase('/contact')} class="btn chat__cta">Book a discovery call <span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a href="mailto:hello@scalesy.com" class="chat__link">Email hello@scalesy.com</a>
+      <a href="https://wa.me/914440001200" class="chat__link" target="_blank" rel="noopener">Message us on WhatsApp</a>
+    </div>
+  </div>
+
+  <button class="chat__launcher" data-chat-launcher aria-expanded="false" aria-label="Chat with Scalesy">
+    <svg class="chat__icon chat__icon--chat" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 16.5H9l-4.5 3.5V16.5H4A1.5 1.5 0 0 1 2.5 15V7A1.5 1.5 0 0 1 4 5.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="8" cy="11" r="1" fill="currentColor"/><circle cx="12" cy="11" r="1" fill="currentColor"/><circle cx="16" cy="11" r="1" fill="currentColor"/>
+    </svg>
+    <svg class="chat__icon chat__icon--close" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span class="chat__label">Chat with us</span>
+  </button>
+</div>
+
+<style>
+  .chat {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 48;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+  }
+
+  .chat__launcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 3.4rem;
+    padding: 0 1.2rem 0 1rem;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+    transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .chat__launcher:hover { background: var(--btn-bg-press); transform: translateY(-2px); }
+  .chat__icon { width: 22px; height: 22px; flex: none; }
+  .chat__icon--close { display: none; }
+  .chat[data-open] .chat__icon--chat { display: none; }
+  .chat[data-open] .chat__icon--close { display: block; }
+  .chat__label { font-size: var(--step--1); font-weight: 500; letter-spacing: 0.01em; }
+  .chat[data-open] .chat__label { display: none; }
+
+  .chat__panel {
+    width: min(21rem, calc(100vw - 2rem));
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    transform-origin: bottom right;
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .chat[data-open] .chat__panel { opacity: 1; transform: none; pointer-events: auto; }
+
+  .chat__head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--line-faint);
+  }
+  .chat__avatar { height: 1.9rem; width: auto; }
+  .chat__name { font-family: var(--font-display); font-size: var(--step-0); color: var(--text); }
+  .chat__status { font-size: 0.72rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem; }
+  .chat__dot { width: 6px; height: 6px; border-radius: 50%; background: #34c759; }
+  .chat__close { background: none; border: 0; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; padding: 0.3rem; }
+  .chat__close:hover { color: var(--text); }
+
+  .chat__body { padding: 1.1rem; }
+  .chat__bubble {
+    background: var(--bg-raise);
+    border: 1px solid var(--line-faint);
+    border-radius: 12px 12px 12px 3px;
+    padding: 0.8rem 0.95rem;
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .chat__actions { padding: 0 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
+  .chat__cta { justify-content: center; }
+  .chat__link {
+    font-size: var(--step--1);
+    color: var(--text-secondary);
+    text-align: center;
+    transition: color 0.3s var(--ease);
+  }
+  .chat__link:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chat__panel, .chat__launcher { transition: none; }
+  }
+  @media (max-width: 560px) {
+    .chat__label { display: none; }
+    .chat__launcher { padding: 0; width: 3.4rem; justify-content: center; }
+  }
+</style>
