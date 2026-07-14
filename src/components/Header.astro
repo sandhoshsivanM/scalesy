@@ -31,7 +31,17 @@ const isActive = (href) =>
       ))}
     </nav>
 
-    <a href={withBase('/contact')} class="site-header__cta link-underline">Book a Discovery Call</a>
+    <button class="theme-toggle" data-theme-toggle aria-label="Switch colour theme" title="Switch theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.3" />
+        <path d="M10 2.5 A7.5 7.5 0 0 1 10 17.5 Z" fill="currentColor" />
+      </svg>
+    </button>
+
+    <a href={withBase('/contact')} class="btn site-header__cta">
+      Book a Discovery Call
+      <span class="btn__arrow" aria-hidden="true">→</span>
+    </a>
 
     <button class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav">
       <span class="visually-hidden">Menu</span>
@@ -54,11 +64,23 @@ const isActive = (href) =>
       <div class="mobile-nav__foot">
         <a href={withBase('/contact')} class="mobile-nav__cta">Book a Discovery Call →</a>
         <a href="mailto:hello@scalesy.com" class="mobile-nav__mail">hello@scalesy.com</a>
+        <button class="mobile-nav__theme" data-theme-toggle>Switch theme</button>
         <p class="mobile-nav__loc">Chennai, Tamil Nadu</p>
       </div>
     </div>
   </div>
 </header>
+
+<!-- Sticky book-a-call bar: appears after the hero, dismissible -->
+<div class="sticky-cta" data-sticky-cta aria-hidden="true">
+  <div class="wrap sticky-cta__inner">
+    <p class="sticky-cta__text">Ready to build something measurable?</p>
+    <div class="sticky-cta__actions">
+      <a href={withBase('/contact')} class="btn sticky-cta__btn">Book a Discovery Call <span class="btn__arrow" aria-hidden="true">→</span></a>
+      <button class="sticky-cta__close" data-sticky-close aria-label="Dismiss">✕</button>
+    </div>
+  </div>
+</div>
 
 <style>
   .site-header {
@@ -109,10 +131,74 @@ const isActive = (href) =>
   .site-nav__link:hover::after,
   .site-nav__link[aria-current='page']::after { transform: scaleX(1); }
 
-  .site-header__cta {
+  .site-header__cta { white-space: nowrap; }
+
+  .theme-toggle {
+    width: 38px; height: 38px;
+    display: grid; place-items: center;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.3s var(--ease), color 0.3s var(--ease), transform 0.4s var(--ease);
+  }
+  .theme-toggle svg { width: 18px; height: 18px; transition: transform 0.5s var(--ease); }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  :root[data-theme="light"] .theme-toggle svg { transform: rotate(180deg); }
+
+  .mobile-nav__theme {
+    align-self: flex-start;
+    margin-top: 0.2rem;
+    background: none; border: 0; padding: 0;
+    font-family: var(--font-body);
     font-size: var(--step--1);
     letter-spacing: 0.02em;
-    white-space: nowrap;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+  }
+
+  /* sticky book-a-call bar */
+  .sticky-cta {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 46;
+    background: var(--ink);
+    color: var(--text-on-ink);
+    transform: translateY(110%);
+    transition: transform 0.5s var(--ease);
+  }
+  .sticky-cta[data-show] { transform: none; }
+  .sticky-cta__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.85rem;
+  }
+  .sticky-cta__text {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    letter-spacing: -0.01em;
+    color: var(--text-on-ink);
+  }
+  .sticky-cta__actions { display: flex; align-items: center; gap: 1rem; }
+  .sticky-cta__close {
+    background: none; border: 0; cursor: pointer;
+    color: var(--text-on-ink-2);
+    font-size: 0.9rem; padding: 0.4rem;
+    transition: color 0.3s var(--ease);
+  }
+  .sticky-cta__close:hover { color: var(--text-on-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta { transition: none; }
+  }
+  @media (max-width: 560px) {
+    .sticky-cta__text { font-size: var(--step--1); }
+    .sticky-cta__btn { padding: 0.7rem 1.1rem; }
   }
 
   .menu-toggle {
@@ -208,7 +294,7 @@ const isActive = (href) =>
   }
 
   @media (max-width: 860px) {
-    .site-nav, .site-header__cta { display: none; }
+    .site-nav, .site-header__cta, .theme-toggle { display: none; }
     .menu-toggle { display: flex; }
   }
 </style>

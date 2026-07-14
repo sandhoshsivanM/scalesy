@@ -26,6 +26,16 @@ const fontFace = ['Light 300', 'Regular 400 450', 'Medium 500', 'Bold 700']
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline>
+      // Theme init BEFORE paint (no flash). Default: dark (black + gold).
+      // Honors a saved choice, else the OS preference.
+      (function () {
+        try {
+          var saved = localStorage.getItem('scalesy-theme');
+          var theme = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        } catch (e) {}
+      })();
+
       // Scroll-reveal, inlined so it always runs alongside the `.js` gate
       // (no dependency on the deferred bundle). Content is visible by default
       // without JS; hidden→shown only when this runs.
@@ -53,7 +63,7 @@ const fontFace = ['Light 300', 'Regular 400 450', 'Medium 500', 'Bold 700']
     </script>
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0E0E0E" />
+    <meta name="theme-color" content="#FFFFFF" />
 
     <!-- Favicons / touch icons -->
     <link rel="icon" type="image/png" sizes="32x32" href={withBase('/favicon-32.png')} />

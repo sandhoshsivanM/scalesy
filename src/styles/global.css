@@ -11,17 +11,62 @@
    loads from Fontshare via <link> in Base.astro. If Neue Montreal is
    unavailable the stack falls through to General Sans → system. */
 
-/* ---- Tokens ------------------------------------------------ */
+/* ---- Tokens ------------------------------------------------
+   Two themes, gold accent in both. DARK (black + gold) is the default;
+   `html[data-theme="light"]` is WHITE + gold. The toggle in the header
+   swaps `data-theme` and persists it. Buttons (--btn-*) stay bright gold
+   with dark text in both themes; text-accent (--accent) deepens on white
+   so small gold labels stay legible. */
 :root {
+  /* DARK — black + gold */
   --bg:            #0E0E0E;
-  --bg-raise:      #131313;   /* barely-there panel, used sparingly */
-  --accent:        #CFA94A;   /* gold */
-  --text:          #F8F8F8;
-  --text-secondary:#8F8F8F;
+  --bg-raise:      #171717;   /* cards / subtle panels */
+  --ink:           #151515;   /* contrast band bg */
+  --accent:        #CFA94A;   /* gold — text, links, index, ticks */
+  --accent-press:  #E0BC63;
+  --gold:          #CFA94A;
+  --btn-bg:        #CFA94A;   /* filled button */
+  --btn-bg-press:  #E0BC63;
+  --btn-text:      #0E0E0E;
+  --text:          #F5F4F0;
+  --text-secondary:#9C9A92;
+  --text-on-ink:   #F5F4F0;   /* text on contrast bands */
+  --text-on-ink-2: #9C9A92;
 
-  --line:          rgba(207, 169, 74, 0.28);  /* hairline gold */
-  --line-faint:    rgba(248, 248, 248, 0.08); /* neutral hairline */
+  --line:          rgba(255, 255, 255, 0.13);
+  --line-strong:   rgba(255, 255, 255, 0.26);
+  --line-faint:    rgba(255, 255, 255, 0.07);
+  --line-gold:     rgba(207, 169, 74, 0.5);
 
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  /* WHITE — white + gold */
+  --bg:            #FFFFFF;
+  --bg-raise:      #F5F4F0;
+  --ink:           #121212;
+  --accent:        #8A6A1C;   /* deeper gold, legible on white */
+  --accent-press:  #6E5314;
+  --gold:          #B8912F;
+  --btn-bg:        #C9A24B;
+  --btn-bg-press:  #B8912F;
+  --btn-text:      #14120C;
+  --text:          #16150F;
+  --text-secondary:#5E5B52;
+  --text-on-ink:   #F5F4F0;
+  --text-on-ink-2: #A6A29A;
+
+  --line:          rgba(20, 18, 12, 0.14);
+  --line-strong:   rgba(20, 18, 12, 0.26);
+  --line-faint:    rgba(20, 18, 12, 0.07);
+  --line-gold:     rgba(138, 106, 28, 0.5);
+
+  color-scheme: light;
+}
+
+/* ---- Theme-agnostic tokens (type, scale, rhythm) ----------- */
+:root {
   --font-display: 'Neue Montreal', 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -82,7 +127,22 @@ a {
 
 img { display: block; max-width: 100%; height: auto; }
 
-::selection { background: var(--accent); color: #0E0E0E; }
+::selection { background: var(--gold); color: #0E0E0E; }
+
+/* contrast bands: dark section on either theme; flip text + hairlines inside */
+.on-ink {
+  background: var(--ink);
+  color: var(--text-on-ink);
+  --text: var(--text-on-ink);
+  --text-secondary: var(--text-on-ink-2);
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.28);
+  --line-faint: rgba(255, 255, 255, 0.08);
+  --accent: #CFA94A;
+  --line-gold: rgba(207, 169, 74, 0.5);
+}
+.on-ink .text-secondary { color: var(--text-on-ink-2); }
+.on-ink .eyebrow { color: var(--text-on-ink-2); }
 
 :focus-visible {
   outline: 1px solid var(--accent);
@@ -121,10 +181,12 @@ img { display: block; max-width: 100%; height: auto; }
   content: "";
   width: 1.6rem;
   height: 1px;
-  background: var(--accent);
+  background: var(--gold);
   display: inline-block;
 }
 .eyebrow--index { color: var(--accent); }
+/* the leading index number reads blue; kept the tick gold above */
+.eyebrow--index > span:first-child { color: var(--accent); }
 
 /* ---- Hairline dividers (precision motif) ------------------- */
 .rule {
@@ -148,10 +210,10 @@ img { display: block; max-width: 100%; height: auto; }
   height: 6px;
   background-image: repeating-linear-gradient(
     to right,
-    var(--accent) 0, var(--accent) 1px,
+    var(--gold) 0, var(--gold) 1px,
     transparent 1px, transparent 40px
   );
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 /* ---- Buttons / links --------------------------------------- */
@@ -189,7 +251,39 @@ img { display: block; max-width: 100%; height: auto; }
 .cta__arrow { transition: transform 0.4s var(--ease); }
 .cta:hover .cta__arrow { transform: translateX(4px); }
 
-/* inline gold link */
+/* filled blue primary button — the commercial "Book a call" action */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--step--1);
+  letter-spacing: 0.02em;
+  color: var(--btn-text);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-bg);
+  border-radius: 999px;
+  padding: 0.95rem 1.6rem;
+  cursor: pointer;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.btn:hover { background: var(--btn-bg-press); border-color: var(--btn-bg-press); }
+.btn:active { transform: translateY(1px); }
+.btn .btn__arrow { transition: transform 0.35s var(--ease); }
+.btn:hover .btn__arrow { transform: translateX(3px); }
+
+/* ghost variant — outline on light, or on dark bands */
+.btn--ghost {
+  color: var(--text);
+  background: transparent;
+  border-color: var(--line-strong);
+}
+.btn--ghost:hover { background: var(--bg-raise); border-color: var(--text); }
+.on-ink .btn--ghost { color: var(--text-on-ink); border-color: rgba(255,255,255,0.28); }
+.on-ink .btn--ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
+
+/* inline link with animated underline */
 .link-underline {
   position: relative;
   color: var(--text);
@@ -239,9 +333,8 @@ img { display: block; max-width: 100%; height: auto; }
 .img-reveal { position: relative; overflow: hidden; }
 .img-reveal img {
   transition: transform 1.6s var(--ease), filter 0.9s var(--ease);
-  /* unified gold duotone — makes the photos read as one curated set. */
-  filter: grayscale(1) sepia(0.42) hue-rotate(3deg) saturate(1.35)
-          brightness(0.86) contrast(1.06);
+  /* clean, near-natural on the light theme — a whisper of unifying contrast. */
+  filter: saturate(0.98) contrast(1.03);
 }
 .js .img-reveal img { transform: scale(1.06); }
 .js .img-reveal::after {

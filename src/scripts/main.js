@@ -163,10 +163,53 @@ function initBooking() {
   });
 }
 
+/* -------- Theme toggle -------- */
+function initTheme() {
+  const toggles = document.querySelectorAll('[data-theme-toggle]');
+  if (!toggles.length) return;
+  const apply = (theme) => {
+    if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    else document.documentElement.removeAttribute('data-theme');
+    try { localStorage.setItem('scalesy-theme', theme); } catch (e) {}
+  };
+  toggles.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      apply(isLight ? 'dark' : 'light');
+    })
+  );
+}
+
+/* -------- Sticky book-a-call bar -------- */
+function initStickyCta() {
+  const bar = document.querySelector('[data-sticky-cta]');
+  if (!bar) return;
+  const close = bar.querySelector('[data-sticky-close]');
+  let dismissed = false;
+  try { dismissed = sessionStorage.getItem('scalesy-cta-dismissed') === '1'; } catch (e) {}
+
+  const onScroll = () => {
+    if (dismissed) return;
+    const y = window.scrollY;
+    const nearBottom = y + window.innerHeight > document.body.scrollHeight - 900;
+    if (y > window.innerHeight * 0.9 && !nearBottom) bar.setAttribute('data-show', '');
+    else bar.removeAttribute('data-show');
+  };
+  close?.addEventListener('click', () => {
+    dismissed = true;
+    bar.removeAttribute('data-show');
+    try { sessionStorage.setItem('scalesy-cta-dismissed', '1'); } catch (e) {}
+  });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
 /* -------- Boot -------- */
 function boot() {
+  initTheme();
   initHeader();
   initMenu();
+  initStickyCta();
   initTestimonials();
   initBooking();
 }

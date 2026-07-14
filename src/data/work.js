@@ -8,6 +8,8 @@ export const work = [
   {
     slug: 'marina-capital',
     outcome: 'A brand composed enough to hold the boardroom.',
+    metric: '',        // e.g. '2.4×'  (real numbers only)
+    metricLabel: '',   // e.g. 'Return on ad spend'
     name: 'Marina Capital',
     industry: 'Finance & Investment',
     location: 'Chennai',
@@ -37,6 +39,8 @@ export const work = [
   {
     slug: 'kovai-weaves',
     outcome: 'A house whose story now travels intact — from loom to boutique.',
+    metric: '',        // e.g. '2.4×'  (real numbers only)
+    metricLabel: '',   // e.g. 'Return on ad spend'
     name: 'Kovai Weaves',
     industry: 'Textiles & Craft',
     location: 'Coimbatore',
@@ -66,6 +70,8 @@ export const work = [
   {
     slug: 'nilgiri-estates',
     outcome: 'Guests arrive already knowing what the brand stands for.',
+    metric: '',        // e.g. '2.4×'  (real numbers only)
+    metricLabel: '',   // e.g. 'Return on ad spend'
     name: 'Nilgiri Estates',
     industry: 'Hospitality',
     location: 'The Nilgiris',
@@ -95,6 +101,8 @@ export const work = [
   {
     slug: 'kanchi-silks',
     outcome: 'Growth that compounds — without discounting the weave.',
+    metric: '',        // e.g. '2.4×'  (real numbers only)
+    metricLabel: '',   // e.g. 'Return on ad spend'
     name: 'Kanchi Silks',
     industry: 'Retail & Heritage',
     location: 'Kanchipuram',
@@ -124,6 +132,8 @@ export const work = [
   {
     slug: 'chola-health',
     outcome: 'Expertise made legible, credibility kept intact.',
+    metric: '',        // e.g. '2.4×'  (real numbers only)
+    metricLabel: '',   // e.g. 'Return on ad spend'
     name: 'Chola Health',
     industry: 'Healthcare',
     location: 'Chennai',

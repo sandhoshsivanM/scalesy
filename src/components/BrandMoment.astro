@@ -2,7 +2,7 @@
 import { withBase } from '../lib/paths.js';
 import Tagline from './Tagline.astro';
 ---
-<section class="brand-moment" aria-label="Scalesy">
+<section class="brand-moment on-ink" aria-label="Scalesy">
   <div class="wrap">
     <div class="rule-ticked" aria-hidden="true"></div>
 
@@ -24,7 +24,7 @@ import Tagline from './Tagline.astro';
 </section>
 
 <style>
-  .brand-moment { padding-block: clamp(2rem, 5vw, 4rem); }
+  .brand-moment { padding-block: clamp(3rem, 6vw, 5rem); margin-block: clamp(2rem, 5vw, 4rem); }
   .brand-moment__inner {
     display: flex;
     flex-direction: column;
@@ -43,7 +43,7 @@ import Tagline from './Tagline.astro';
     font-size: var(--step-3);
     letter-spacing: -0.03em;
     line-height: 1;
-    color: var(--text);
+    color: var(--text-on-ink);
     font-weight: 450;
   }
   .brand-moment__tagline { width: min(30rem, 90%); }
