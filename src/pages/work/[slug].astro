@@ -65,6 +65,15 @@ const { project, next } = Astro.props;
       </div>
     </div>
 
+    {project.outcome && (
+      <div class="wrap">
+        <blockquote class="project-outcome" data-reveal>
+          <span class="project-outcome__label">Outcome</span>
+          <p class="project-outcome__text">{project.outcome}</p>
+        </blockquote>
+      </div>
+    )}
+
     <div class="wrap">
       <a class="project-next" href={withBase(`/work/${next.slug}`)}>
         <span class="project-next__label">Next project</span>
@@ -148,6 +157,30 @@ const { project, next } = Astro.props;
     line-height: 1.5;
     color: var(--text);
     max-width: 46ch;
+  }
+
+  .project-outcome {
+    margin: clamp(4rem, 9vw, 7rem) 0 0;
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    max-width: 46rem;
+  }
+  .project-outcome__label {
+    display: block;
+    font-size: var(--step--1);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+  }
+  .project-outcome__text {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin: 0;
   }
 
   .project-next {

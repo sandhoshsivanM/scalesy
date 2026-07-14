@@ -7,6 +7,7 @@ const u = (id, w = 1600) =>
 export const work = [
   {
     slug: 'marina-capital',
+    outcome: 'A brand composed enough to hold the boardroom.',
     name: 'Marina Capital',
     industry: 'Finance & Investment',
     location: 'Chennai',
@@ -35,6 +36,7 @@ export const work = [
   },
   {
     slug: 'kovai-weaves',
+    outcome: 'A house whose story now travels intact — from loom to boutique.',
     name: 'Kovai Weaves',
     industry: 'Textiles & Craft',
     location: 'Coimbatore',
@@ -63,6 +65,7 @@ export const work = [
   },
   {
     slug: 'nilgiri-estates',
+    outcome: 'Guests arrive already knowing what the brand stands for.',
     name: 'Nilgiri Estates',
     industry: 'Hospitality',
     location: 'The Nilgiris',
@@ -91,6 +94,7 @@ export const work = [
   },
   {
     slug: 'kanchi-silks',
+    outcome: 'Growth that compounds — without discounting the weave.',
     name: 'Kanchi Silks',
     industry: 'Retail & Heritage',
     location: 'Kanchipuram',
@@ -119,6 +123,7 @@ export const work = [
   },
   {
     slug: 'chola-health',
+    outcome: 'Expertise made legible, credibility kept intact.',
     name: 'Chola Health',
     industry: 'Healthcare',
     location: 'Chennai',
