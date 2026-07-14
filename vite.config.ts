@@ -31,19 +31,13 @@ export default defineConfig({
   ssgOptions: {
     script: 'async',
     formatting: 'none',
-    // Analog of Astro getStaticPaths(): expand :slug routes into one prerendered
-    // path per project / insight; drop the catch-all.
+    // Analog of Astro getStaticPaths(): keep the static routes, drop dynamic /
+    // catch-all patterns, and append one concrete path per project / insight.
     includedRoutes(paths) {
-      return paths.flatMap((path) => {
-        if (path.includes(':slug') && path.startsWith('/work')) {
-          return work.map((p) => `/work/${p.slug}`);
-        }
-        if (path.includes(':slug') && path.startsWith('/insights')) {
-          return insights.map((p) => `/insights/${p.slug}`);
-        }
-        if (path.includes(':slug') || path.includes('*')) return [];
-        return path;
-      });
+      const staticPaths = paths.filter((p) => !p.includes(':') && !p.includes('*'));
+      const workPaths = work.map((p) => `/work/${p.slug}`);
+      const insightPaths = insights.map((p) => `/insights/${p.slug}`);
+      return [...new Set([...staticPaths, ...workPaths, ...insightPaths])];
     },
   },
 });
