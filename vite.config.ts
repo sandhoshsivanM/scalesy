@@ -21,15 +21,8 @@ export default defineConfig({
   build: {
     target: 'es2020',
     cssCodeSplit: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          lenis: ['lenis'],
-          router: ['react-router-dom'],
-          gsap: ['gsap'],
-        },
-      },
-    },
+    // gsap / lenis / route pages are split automatically via dynamic import();
+    // no manualChunks (it conflicts with SSR externalization of those modules).
   },
   ssr: {
     // gsap/lenis touch window; let the SSG runtime externalise them cleanly.
@@ -37,7 +30,7 @@ export default defineConfig({
   },
   ssgOptions: {
     script: 'async',
-    formatting: 'minify',
+    formatting: 'none',
     // Analog of Astro getStaticPaths(): expand :slug routes into one prerendered
     // path per project / insight; drop the catch-all.
     includedRoutes(paths) {

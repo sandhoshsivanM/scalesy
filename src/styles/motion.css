@@ -97,11 +97,17 @@
   gap: 1.6rem;
 }
 .preloader__mark {
-  width: clamp(3rem, 8vw, 4.5rem);
-  height: auto;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  letter-spacing: 0.04em;
+  color: #f5f4f0;
   opacity: 0;
   transform: translateY(8px);
   animation: pre-mark 0.7s var(--ease) forwards;
+}
+.preloader__mark .logo__dot {
+  color: #cfa94a;
 }
 .preloader__line {
   width: min(46vw, 320px);

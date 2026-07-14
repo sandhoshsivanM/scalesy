@@ -25,7 +25,7 @@ export function SelectedWorkGallery({ index = '05' }: GalleryProps) {
     const track = trackRef.current;
     if (!section || !track || getMotionState().reducedMotion) return;
 
-    let mm: { revert: () => void } | null = null;
+    let mm: ReturnType<typeof import('gsap').gsap.matchMedia> | null = null;
     let cancelled = false;
 
     (async () => {
