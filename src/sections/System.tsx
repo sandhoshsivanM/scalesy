@@ -88,25 +88,25 @@ export function System() {
         </Reveal>
 
         <div className="system__engine" ref={rootRef} onKeyDown={onKeyDown}>
-          <ol className="system__tabs" role="tablist" aria-label="Disciplines">
+          <div className="system__tabs" role="tablist" aria-label="Disciplines">
             {disciplines.map((d) => (
-              <li key={d.key}>
-                <button
-                  className="system__tab"
-                  role="tab"
-                  data-tab={d.key}
-                  aria-selected={active === d.key}
-                  aria-controls={`panel-${d.key}`}
-                  id={`tab-${d.key}`}
-                  onClick={() => select(d.key)}
-                >
-                  <span className="system__tab-n">{d.n}</span>
-                  <span className="system__tab-title">{d.title}</span>
-                  <span className="system__tab-line" aria-hidden="true" />
-                </button>
-              </li>
+              <button
+                key={d.key}
+                className="system__tab"
+                role="tab"
+                data-tab={d.key}
+                aria-selected={active === d.key}
+                aria-controls={`panel-${d.key}`}
+                id={`tab-${d.key}`}
+                tabIndex={active === d.key ? 0 : -1}
+                onClick={() => select(d.key)}
+              >
+                <span className="system__tab-n">{d.n}</span>
+                <span className="system__tab-title">{d.title}</span>
+                <span className="system__tab-line" aria-hidden="true" />
+              </button>
             ))}
-          </ol>
+          </div>
 
           <div className="system__panels">
             {disciplines.map((d) => {

@@ -42,7 +42,12 @@ export function StickyCTA() {
   };
 
   return (
-    <div className="sticky-cta" data-show={show ? '' : undefined} aria-hidden={!show}>
+    <div
+      className="sticky-cta"
+      data-show={show ? '' : undefined}
+      aria-hidden={!show}
+      {...(!show ? { inert: '' } : {})}
+    >
       <div className="wrap sticky-cta__inner">
         <p className="sticky-cta__text">Ready to build something measurable?</p>
         <div className="sticky-cta__actions">

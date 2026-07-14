@@ -20,7 +20,13 @@ export function ChatWidget() {
 
   return (
     <div className="chat" data-open={open ? '' : undefined} aria-live="polite">
-      <div className="chat__panel" role="dialog" aria-label="Chat with Scalesy" aria-hidden={!open}>
+      <div
+        className="chat__panel"
+        role="dialog"
+        aria-label="Chat with Scalesy"
+        aria-hidden={!open}
+        {...(!open ? { inert: '' } : {})}
+      >
         <div className="chat__head">
           <img className="chat__avatar" src={asset('/brand/scalesy-mark-sm.png')} alt="" width="111" height="160" />
           <div>
@@ -68,7 +74,7 @@ export function ChatWidget() {
         ref={launcherRef}
         className="chat__launcher"
         aria-expanded={open}
-        aria-label="Chat with Scalesy"
+        aria-label="Chat with us"
         onClick={() => setOpen((v) => !v)}
       >
         <svg className="chat__icon chat__icon--chat" viewBox="0 0 24 24" aria-hidden="true">

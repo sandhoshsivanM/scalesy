@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sandhoshsivanm.github.io/scalesy/sitemap.xml

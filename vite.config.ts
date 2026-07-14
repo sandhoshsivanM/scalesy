@@ -29,8 +29,8 @@ export default defineConfig({
     noExternal: ['framer-motion'],
   },
   ssgOptions: {
-    script: 'async',
-    formatting: 'none',
+    // NB: do not set script:'async' — it lets the app bundle run before the
+    // inline __VITE_REACT_SSG_HASH__ assignment, breaking loader-data hydration.
     // Analog of Astro getStaticPaths(): keep the static routes, drop dynamic /
     // catch-all patterns, and append one concrete path per project / insight.
     includedRoutes(paths) {
