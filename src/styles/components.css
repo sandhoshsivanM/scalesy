@@ -602,8 +602,21 @@
 .system__tab:hover, .system__tab[aria-selected='true'] { color: var(--text); }
 .system__tab[aria-selected='true'] .system__tab-title { transform: translateX(4px); }
 .system__tab[aria-selected='true'] .system__tab-line { width: 100%; }
-.system__panels { position: relative; }
-.system-panel[hidden] { display: none; }
+/* All panels share one grid cell so switching tabs never changes the section
+   height (no reflow → no ScrollTrigger refresh churn). Inactive panels are
+   hidden via visibility (kept out of the a11y tree + tab order). */
+.system__panels { display: grid; }
+.system-panel {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.system-panel[data-active] {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
 .system-panel__index { font-size: var(--step--1); letter-spacing: 0.12em; color: var(--accent); }
 .system-panel__title { font-size: var(--step-3); letter-spacing: -0.03em; line-height: 1; margin-top: 0.8rem; }
 .system-panel__tagline { font-family: var(--font-display); font-size: var(--step-1); color: var(--text); margin-top: 0.8rem; }
@@ -628,6 +641,22 @@
 .work-gallery__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1.2rem 3rem; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
 .work-gallery__note { font-size: var(--step-0); }
 .work-gallery__track { display: flex; gap: clamp(1.5rem, 3vw, 3rem); padding-inline: var(--gutter); }
+
+/* Desktop: sticky viewport + horizontal scrub (no ScrollTrigger pin). The
+   section's height is set from JS to create the scroll room. */
+@media (min-width: 861px) {
+  .work-gallery__viewport {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding-block: clamp(3rem, 7vh, 6rem);
+  }
+  .work-gallery__track { will-change: transform; }
+}
 .work-panel { flex: 0 0 min(46vw, 620px); }
 .work-panel__link { display: flex; flex-direction: column; gap: 1.4rem; }
 .work-panel__media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; }

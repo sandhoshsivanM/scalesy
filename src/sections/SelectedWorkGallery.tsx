@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { featuredWork } from '@/data/work';
 import type { WorkProject } from '@/data/types';
@@ -12,10 +12,13 @@ interface GalleryProps {
   index?: string;
 }
 
-// Selected Work — a pinned horizontal filmstrip on desktop, a vertical stack on
-// mobile / reduced-motion. GSAP scrubs the track's X against scroll while the
-// section is pinned; gsap.matchMedia owns breakpoint teardown.
-export function SelectedWorkGallery({ index = '05' }: GalleryProps) {
+// Selected Work — a horizontal filmstrip on desktop, a vertical stack on
+// mobile / reduced-motion. Instead of ScrollTrigger `pin` (which wraps the
+// section in a `.pin-spacer` and reparents it outside React's knowledge —
+// causing "Node.removeChild is not a child" on route change), the section is
+// given real height and its inner viewport is CSS `position: sticky`, so GSAP
+// only scrubs the track's translateX. No DOM reparenting → React-safe.
+export const SelectedWorkGallery = memo(function SelectedWorkGallery({ index = '05' }: GalleryProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const { setCursor } = useCursor();
@@ -31,10 +34,18 @@ export function SelectedWorkGallery({ index = '05' }: GalleryProps) {
     (async () => {
       const { registerGsap } = await import('@/lib/motion/registerGsap');
       if (cancelled) return;
-      const { gsap } = registerGsap();
+      const { gsap, ScrollTrigger } = registerGsap();
       mm = gsap.matchMedia();
       mm.add('(min-width: 861px)', () => {
-        const distance = () => track.scrollWidth - window.innerWidth * 0.92;
+        const distance = () => Math.max(0, track.scrollWidth - window.innerWidth * 0.92);
+        // The section provides the vertical scroll room the pin used to create.
+        // Set before every refresh measurement so `end` is computed correctly.
+        const setHeight = () => {
+          section.style.height = `${window.innerHeight + distance()}px`;
+        };
+        setHeight();
+        ScrollTrigger.addEventListener('refreshInit', setHeight);
+
         const tween = gsap.to(track, {
           x: () => -distance(),
           ease: 'none',
@@ -42,19 +53,24 @@ export function SelectedWorkGallery({ index = '05' }: GalleryProps) {
             trigger: section,
             start: 'top top',
             end: () => `+=${distance()}`,
-            pin: true,
             scrub: 0.6,
-            anticipatePin: 1,
             invalidateOnRefresh: true,
           },
         });
-        return () => tween.scrollTrigger?.kill();
+
+        return () => {
+          ScrollTrigger.removeEventListener('refreshInit', setHeight);
+          tween.scrollTrigger?.kill();
+          tween.kill();
+          section.style.height = '';
+        };
       });
     })();
 
     return () => {
       cancelled = true;
       mm?.revert();
+      if (section) section.style.height = '';
     };
   }, []);
 
@@ -81,7 +97,7 @@ export function SelectedWorkGallery({ index = '05' }: GalleryProps) {
       </div>
     </section>
   );
-}
+});
 
 function WorkPanel({
   p,

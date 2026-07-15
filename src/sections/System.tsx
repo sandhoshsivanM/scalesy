@@ -119,7 +119,7 @@ export function System() {
                   id={`panel-${d.key}`}
                   aria-labelledby={`tab-${d.key}`}
                   data-active={on ? '' : undefined}
-                  hidden={!on}
+                  aria-hidden={!on}
                   key={d.key}
                 >
                   <p className="system-panel__index">{d.n} / 04</p>
